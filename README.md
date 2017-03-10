@@ -18,7 +18,7 @@ The following **required** functionality is complete:
 
 Here's a walkthrough of implemented user stories:
 
-[Imgur](http://i.imgur.com/XJ08NMu.gifv)
+(http://i.imgur.com/XJ08NMu.gifv)
 
 ## Notes
 
