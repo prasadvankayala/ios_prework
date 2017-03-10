@@ -18,7 +18,7 @@ The following **required** functionality is complete:
 
 Here's a walkthrough of implemented user stories:
 
-![alt tag](http://i.imgur.com/XJ08NMu.gifv)
+![img](http://i.imgur.com/XJ08NMu.gifv)
 
 ## Notes
 
