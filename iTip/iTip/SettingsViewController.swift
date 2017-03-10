@@ -14,6 +14,8 @@ class SettingsViewController: UIViewController {
     
     @IBOutlet weak var stepControl: UIStepper!
     
+    @IBOutlet weak var saveButton: UIButton!
+    
     var cValue = 0.0
     var step = 0.0
     var selSegment=0
@@ -22,6 +24,18 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let defaults = UserDefaults.standard
+        if let Tip = defaults.string(forKey:"lTip") {
+            defTipControl.setTitle(Tip, forSegmentAt: 0)
+        }
+        if let Tip = defaults.string(forKey:"mTip") {
+            defTipControl.setTitle(Tip, forSegmentAt: 1)
+        }
+        if let Tip = defaults.string(forKey:"hTip") {
+            defTipControl.setTitle(Tip, forSegmentAt: 2)
+        }
+        
         step = stepControl.value
         selSegment = defTipControl.selectedSegmentIndex
         currValue = defTipControl.titleForSegment(at: selSegment)!
@@ -29,6 +43,8 @@ class SettingsViewController: UIViewController {
         stepControl.value=cValue
         
         // Do any additional setup after loading the view.
+        
+        saveButton.isHidden=true
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,6 +65,24 @@ class SettingsViewController: UIViewController {
         
         defTipControl.setTitle(dValue+"%", forSegmentAt: defTipControl.selectedSegmentIndex)
         
+        saveButton.isHidden=false
+        
+    }
+    
+    @IBAction func saveTipPercnt(_ sender: Any) {
+        
+        let loTip = defTipControl.titleForSegment(at: 0)
+        let medTip = defTipControl.titleForSegment(at: 1)
+        let hiTip = defTipControl.titleForSegment(at: 2)
+        
+        let defaults = UserDefaults.standard
+        defaults.set(loTip, forKey: "lTip")
+        defaults.set(medTip, forKey: "mTip")
+        defaults.set(hiTip, forKey: "hTip")
+        defaults.synchronize()
+        
+        saveButton.isHidden=true
+                
     }
 
     /*
