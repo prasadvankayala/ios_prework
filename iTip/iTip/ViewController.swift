@@ -22,6 +22,8 @@ class ViewController: UIViewController {
 
     }
     
+//  Default View and getting default values stored in UserDefaults
+    
     override func viewWillAppear(_ animated: Bool) {
         
         let defTip = UserDefaults.standard.array(forKey: "tip")
@@ -31,7 +33,7 @@ class ViewController: UIViewController {
                 tipControl.setTitle("\(val)",forSegmentAt: i);
             }
         }
-        calcTip(self)
+        calcTip(self) // Calculating the Tip & Total based on selected Tip %
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,6 +44,8 @@ class ViewController: UIViewController {
     @IBAction func onTap(_ sender: Any) {
         view.endEditing(true)
     }
+    
+// Calculating Tip Amount and Total Amount
     
     @IBAction func calcTip(_ sender: Any) {
         
