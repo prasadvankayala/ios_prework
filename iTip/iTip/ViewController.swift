@@ -14,26 +14,23 @@ class ViewController: UIViewController {
     @IBOutlet weak var tipLabel: UILabel!
     @IBOutlet weak var totLabel: UILabel!
     @IBOutlet weak var tipControl: UISegmentedControl!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib. 
-        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        let defaults = UserDefaults.standard
-        if let Tip = defaults.string(forKey:"lTip") {
-            tipControl.setTitle(Tip, forSegmentAt: 0)
-        }
-        if let Tip = defaults.string(forKey:"mTip") {
-            tipControl.setTitle(Tip, forSegmentAt: 1)
-        }
-        if let Tip = defaults.string(forKey:"hTip") {
-            tipControl.setTitle(Tip, forSegmentAt: 2)
-        }
+        let defTip = UserDefaults.standard.array(forKey: "tip")
         
+        if(defTip != nil){
+            for (i,val) in (defTip?.enumerated())! {
+                tipControl.setTitle("\(val)",forSegmentAt: i);
+            }
+        }
         calcTip(self)
     }
 
@@ -59,6 +56,7 @@ class ViewController: UIViewController {
         
         tipLabel.text = String(format:"$%.2f",tip)
         totLabel.text = String(format:"$%.2f",total)
+
     }
 
 }

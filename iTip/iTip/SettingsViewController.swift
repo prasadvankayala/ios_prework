@@ -11,40 +11,38 @@ import UIKit
 class SettingsViewController: UIViewController {
     
     @IBOutlet weak var defTipControl: UISegmentedControl!
-    
     @IBOutlet weak var stepControl: UIStepper!
-    
     @IBOutlet weak var saveButton: UIButton!
     
-    var cValue = 0.0
-    var step = 0.0
-    var selSegment=0
-    var currValue:String = ""
+    var cValue : Double = 0.0
+    var step : Double = 0.0
+    var selSegment : Int = 0
+    var currValue: String = ""
+
+//  get Selected Tip Value from the Segmented control
+    func getSelectedTipValue()
+    {
+        selSegment = defTipControl.selectedSegmentIndex
+        currValue = defTipControl.titleForSegment(at: selSegment)!
+        cValue=Double(String(currValue.characters.dropLast(1)))!
+        stepControl.value=cValue // initializing the step control to selected segment value
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        let defaults = UserDefaults.standard
-        if let Tip = defaults.string(forKey:"lTip") {
-            defTipControl.setTitle(Tip, forSegmentAt: 0)
+        let defTip = UserDefaults.standard.array(forKey: "tip")
+        if(defTip != nil){
+            for (i,val) in (defTip?.enumerated())! {
+                defTipControl.setTitle("\(val)",forSegmentAt: i);
+            }
         }
-        if let Tip = defaults.string(forKey:"mTip") {
-            defTipControl.setTitle(Tip, forSegmentAt: 1)
-        }
-        if let Tip = defaults.string(forKey:"hTip") {
-            defTipControl.setTitle(Tip, forSegmentAt: 2)
-        }
+        step = stepControl.value // reading the current step value
         
-        step = stepControl.value
-        selSegment = defTipControl.selectedSegmentIndex
-        currValue = defTipControl.titleForSegment(at: selSegment)!
-        cValue=Double(String(currValue.characters.dropLast(1)))!
-        stepControl.value=cValue
+        getSelectedTipValue() // get selected tip value
         
-        // Do any additional setup after loading the view.
+        saveButton.isHidden=true // hiding the save button till Tip % are changed
         
-        saveButton.isHidden=true
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,35 +51,31 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func segmentChanged(_ sender: Any) {
-        selSegment = defTipControl.selectedSegmentIndex
-        currValue = defTipControl.titleForSegment(at: selSegment)!
-        cValue=Double(String(currValue.characters.dropLast(1)))!
-        stepControl.value=cValue
+        getSelectedTipValue()
     }
     
+//  Changing the Selected Segment value with the step control change
     @IBAction func changeValues(_ sender: Any) {
-        step = stepControl.value
-        let dValue = String(format:"%.0f",step)
+        step = stepControl.value // current step control value
+        let dValue = String(format:"%.0f",step) // converting to string
         
-        defTipControl.setTitle(dValue+"%", forSegmentAt: defTipControl.selectedSegmentIndex)
+        defTipControl.setTitle(dValue+"%", forSegmentAt: defTipControl.selectedSegmentIndex) // updating the selected tip control with step value
         
-        saveButton.isHidden=false
-        
+        saveButton.isHidden=false // showing the Save button
     }
     
     @IBAction func saveTipPercnt(_ sender: Any) {
         
-        let loTip = defTipControl.titleForSegment(at: 0)
-        let medTip = defTipControl.titleForSegment(at: 1)
-        let hiTip = defTipControl.titleForSegment(at: 2)
-        
+        var tipValues = [String]()
+        for i in 0...2 {
+            tipValues.insert(defTipControl.titleForSegment(at: i)!, at: i)
+        }
+        // Storing the changed Tip % as default values
         let defaults = UserDefaults.standard
-        defaults.set(loTip, forKey: "lTip")
-        defaults.set(medTip, forKey: "mTip")
-        defaults.set(hiTip, forKey: "hTip")
+        defaults.set(tipValues, forKey: "tip")
         defaults.synchronize()
         
-        saveButton.isHidden=true
+        saveButton.isHidden=true // Hiding the Save button after saving the default values
                 
     }
 
@@ -97,10 +91,15 @@ class SettingsViewController: UIViewController {
     }
     */
     
+    // Restore Default Tip Percentages
     @IBAction func restoreDef(_ sender: Any) {
-        defTipControl.setTitle("18%", forSegmentAt: 0)
-        defTipControl.setTitle("20%", forSegmentAt: 1)
-        defTipControl.setTitle("25%", forSegmentAt: 2)
+        
+        let defArray = ["18%","20%","25%"]
+        
+        for (i,val) in defArray.enumerated() {
+            defTipControl.setTitle(val, forSegmentAt: i)
+        }
+        
         defTipControl.selectedSegmentIndex=0
     }
 
